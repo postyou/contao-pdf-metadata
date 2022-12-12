@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $projectDir: "%kernel.project_dir%"
+            $author: "%contao_pdf_metadata.author%"
+            $qpdfPath: "%contao_pdf_metadata.qpdf_path%"
+            $exiftoolPath: "%contao_pdf_metadata.exiftool_path%"
+            $cleanOnUpload: "%contao_pdf_metadata.clean_on_upload%"
+
+    Postyou\ContaoPdfMetadata\:
+        resource: ../src/
+        exclude: ../src/{ContaoManager,DependencyInjection}

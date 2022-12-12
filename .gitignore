@@ -1,0 +1,6 @@
+# Composer
+/composer.lock
+/vendor/
+
+# Vscode
+/.vscode/
