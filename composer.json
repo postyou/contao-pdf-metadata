@@ -1,9 +1,13 @@
 {
     "name": "postyou/contao-pdf-metadata",
     "type": "contao-bundle",
-    "description": "Extends the contao file manager to clean the metadata of PDF files",
+    "description": "Extends the contao file manager to clean up the metadata of PDF files for privacy reasons",
     "license": "LGPL-3.0+",
-    "keywords": ["contao", "pdf", "metadata"],
+    "keywords": [
+        "contao",
+        "pdf",
+        "metadata"
+    ],
     "authors": [
         {
             "name": "POSTYOU Digital- & Filmagentur",

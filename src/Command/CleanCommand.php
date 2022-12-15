@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'contao:pdf-metadata:clean',
-    description: 'Cleans the metadata of all PDF files inside the files directory.'
+    description: 'Clean up the metadata of all PDF files inside the files directory.'
 )]
 class CleanCommand extends Command
 {

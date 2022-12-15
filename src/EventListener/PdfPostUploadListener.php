@@ -20,13 +20,13 @@ class PdfPostUploadListener
 {
     public function __construct(
         private PdfMetadataCleaner $pdfMetadataCleaner,
-        private bool $cleanOnUpload,
+        private bool $cleanupOnUpload,
     ) {
     }
 
     public function __invoke(array $files): void
     {
-        if (!$this->cleanOnUpload) {
+        if (!$this->cleanupOnUpload) {
             return;
         }
 

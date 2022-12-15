@@ -7,7 +7,7 @@ services:
             $author: "%contao_pdf_metadata.author%"
             $qpdfPath: "%contao_pdf_metadata.qpdf_path%"
             $exiftoolPath: "%contao_pdf_metadata.exiftool_path%"
-            $cleanOnUpload: "%contao_pdf_metadata.clean_on_upload%"
+            $cleanupOnUpload: "%contao_pdf_metadata.cleanup_on_upload%"
 
     Postyou\ContaoPdfMetadata\:
         resource: ../src/

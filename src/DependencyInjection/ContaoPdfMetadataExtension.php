@@ -31,6 +31,6 @@ class ContaoPdfMetadataExtension extends Extension
         $container->setParameter('contao_pdf_metadata.author', $config['author']);
         $container->setParameter('contao_pdf_metadata.qpdf_path', $config['qpdf_path']);
         $container->setParameter('contao_pdf_metadata.exiftool_path', $config['exiftool_path']);
-        $container->setParameter('contao_pdf_metadata.clean_on_upload', $config['clean_on_upload']);
+        $container->setParameter('contao_pdf_metadata.cleanup_on_upload', $config['cleanup_on_upload']);
     }
 }
