@@ -59,13 +59,13 @@ class PdfMetadataCleaner
         ]);
 
         if (0 !== $exiftool->run()) {
-            $this->logError($path);
+            $this->logError($path, $exiftool->getOutput());
 
             return;
         }
 
         if (0 !== $qpdf->run()) {
-            $this->logError($path);
+            $this->logError($path, $qpdf->getOutput());
 
             return;
         }
@@ -73,9 +73,9 @@ class PdfMetadataCleaner
         $this->contaoFilesLogger->info("Datei {$path} wurde erfolgreich bereinigt.");
     }
 
-    private function logError(string $path): void
+    private function logError(string $path, string $message): void
     {
-        $this->contaoErrorLogger->error("Datei {$path} konnte nicht bereinigt werden.");
+        $this->contaoErrorLogger->error("Datei {$path} konnte nicht bereinigt werden ({$message}).");
     }
 
     private function tmpName(string $path): string
