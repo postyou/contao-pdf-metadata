@@ -15,7 +15,7 @@ contao_pdf_metadata:
     exiftool_path:        /usr/bin/exiftool
 
     # Clean up the metadata of PDF files immediately after uploading.
-    cleanup_on_upload:      false
+    cleanup_on_upload:    false
 ```
 ## Console Command
 To clean up the metadata of all PDF files in the files directory, you can use the following command:
