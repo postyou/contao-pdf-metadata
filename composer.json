@@ -4,9 +4,9 @@
     "description": "Extends the contao file manager to clean up the metadata of PDF files for privacy reasons",
     "license": "LGPL-3.0+",
     "keywords": [
-        "contao",
-        "pdf",
-        "metadata"
+        "exiftool",
+        "qpdf",
+        "gdpr"
     ],
     "authors": [
         {
