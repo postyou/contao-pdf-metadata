@@ -21,5 +21,5 @@ contao_pdf_metadata:
 To clean up the metadata of all PDF files in the files directory, you can use the following command:
 
 ```console
-vendor/bin/contao-console contao:pdf-metadata:clean
+$ vendor/bin/contao-console contao:pdf-metadata:clean
 ```
