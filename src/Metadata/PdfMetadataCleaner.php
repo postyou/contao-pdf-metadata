@@ -22,9 +22,9 @@ class PdfMetadataCleaner
         private LoggerInterface $contaoErrorLogger,
         private LoggerInterface $contaoFilesLogger,
         private string $projectDir,
-        private string $author,
-        private string $exiftoolPath,
-        private string $qpdfPath,
+        private array $metadata,
+        private array $qpdfConfig,
+        private array $exiftoolConfig,
     ) {
     }
 
@@ -39,9 +39,9 @@ class PdfMetadataCleaner
         $tmpName = $this->tmpName($path);
 
         $exiftool = new Process([
-            $this->exiftoolPath,
+            $this->exiftoolConfig['path'],
             '-all=',
-            "-Author={$this->author}",
+            "-Author={$this->metadata['author']}",
             '-tagsfromfile', '@',
             '-title',
             '-keywords',
@@ -49,14 +49,14 @@ class PdfMetadataCleaner
             '-description',
             $absPath,
             '-o', $tmpName,
-        ]);
+        ], env: $this->exiftoolConfig['env']);
 
         $qpdf = new Process([
-            $this->qpdfPath,
+            $this->qpdfConfig['path'],
             '--linearize',
             $tmpName,
             $absPath,
-        ]);
+        ], env: $this->qpdfConfig['env']);
 
         if (0 !== $exiftool->run()) {
             $this->contaoErrorLogger->error(sprintf('File "%s" could not be processed with ExifTool: %s', $path, $exiftool->getErrorOutput()));

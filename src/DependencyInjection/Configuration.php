@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoPdfMetadata\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -23,27 +24,64 @@ class Configuration implements ConfigurationInterface
         $treeBuilder
             ->getRootNode()
             ->children()
-                ->scalarNode('author')
-                    ->info('Overwrites the author field in the cleaned PDF file.')
-                    ->defaultValue('')
-                ->end()
-                ->scalarNode('qpdf_path')
-                    ->info('The path to the qpdf binary.')
-                    ->cannotBeEmpty()
-                    ->defaultValue('/usr/bin/qpdf')
-                ->end()
-                ->scalarNode('exiftool_path')
-                    ->info('The path to the exiftool binary.')
-                    ->cannotBeEmpty()
-                    ->defaultValue('/usr/bin/exiftool')
-                ->end()
+                ->append($this->addExiftoolNode())
+                ->append($this->addQpdfNode())
                 ->booleanNode('cleanup_on_upload')
                     ->info('Clean up the metadata of PDF files immediately after uploading.')
                     ->defaultFalse()
+                ->end()
+                ->arrayNode('metadata')
+                    ->info('Overwrites metadata fields in the cleaned PDF file.')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('author')
+                            ->defaultValue('')
+                        ->end()
+                    ->end()
                 ->end()
             ->end()
         ;
 
         return $treeBuilder;
+    }
+
+    private function addExiftoolNode(): NodeDefinition
+    {
+        return (new TreeBuilder('exiftool'))
+            ->getRootNode()
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('path')
+                    ->info('Path to the exiftool binary.')
+                    ->cannotBeEmpty()
+                    ->defaultValue('/usr/bin/exiftool')
+                ->end()
+                ->arrayNode('env')
+                    ->info('Environment variables when running exiftool.')
+                    ->useAttributeAsKey('name')
+                    ->scalarPrototype()->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function addQpdfNode(): NodeDefinition
+    {
+        return (new TreeBuilder('qpdf'))
+            ->getRootNode()
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('path')
+                    ->info('Path to the qpdf binary.')
+                    ->cannotBeEmpty()
+                    ->defaultValue('/usr/bin/qpdf')
+                ->end()
+                ->arrayNode('env')
+                    ->info('Environment variables when running qpdf.')
+                    ->useAttributeAsKey('name')
+                    ->scalarPrototype()->end()
+                ->end()
+            ->end()
+        ;        
     }
 }

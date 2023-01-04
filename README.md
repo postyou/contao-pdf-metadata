@@ -19,18 +19,33 @@ $ qpdf --linearize intermediate.pdf file.pdf
 ```yaml
 # config/config.yaml
 contao_pdf_metadata:
+    exiftool:
 
-    # Overwrites the author field in the cleaned PDF file.
-    author:               ''
+        # Path to the exiftool binary.
+        path:                 /usr/bin/exiftool
 
-    # The path to the qpdf binary.
-    qpdf_path:            /usr/bin/qpdf
+        # Environment variables when running exiftool.
+        env:
 
-    # The path to the exiftool binary.
-    exiftool_path:        /usr/bin/exiftool
+            # Prototype
+            name:                 ~
+    qpdf:
+
+        # Path to the qpdf binary.
+        path:                 /usr/bin/qpdf
+
+        # Environment variables when running qpdf.
+        env:
+
+            # Prototype
+            name:                 ~
 
     # Clean up the metadata of PDF files immediately after uploading.
     cleanup_on_upload:    false
+
+    # Overwrites metadata fields in the cleaned PDF file.
+    metadata:
+        author:               ''
 ```
 
 ## Console Command
