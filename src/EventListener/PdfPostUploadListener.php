@@ -30,12 +30,6 @@ class PdfPostUploadListener
             return;
         }
 
-        foreach ($files as $path) {
-            if ('pdf' !== mb_strtolower(pathinfo($path, PATHINFO_EXTENSION))) {
-                continue;
-            }
-
-            ($this->pdfMetadataCleaner)($path);
-        }
+        $this->pdfMetadataCleaner->clean($files);
     }
 }

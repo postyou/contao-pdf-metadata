@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoPdfMetadata\Metadata;
 
+use Contao\CoreBundle\Filesystem\FilesystemItem;
+use Contao\CoreBundle\Filesystem\FilesystemItemIterator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Process\Process;
@@ -28,7 +30,22 @@ class PdfMetadataCleaner
     ) {
     }
 
-    public function __invoke(string $path): void
+    public function clean(FilesystemItemIterator|array $files): void
+    {
+        if ($files instanceof FilesystemItemIterator) {
+            $files = array_map(fn (FilesystemItem $item): string => $item->getPath(), $files->toArray());
+        }
+
+        foreach ($files as $path) {
+            if ('pdf' !== mb_strtolower(pathinfo($path, PATHINFO_EXTENSION))) {
+                continue;
+            }
+
+            $this->cleanFile($path);
+        }
+    }
+
+    private function cleanFile(string $path): void
     {
         if (!str_starts_with($path, 'files/')) {
             $path = Path::join('files', $path);
@@ -70,7 +87,7 @@ class PdfMetadataCleaner
             return;
         }
 
-        $this->contaoFilesLogger->info(sprintf('File "%s" has been successfully cleaned up', $path));
+        $this->contaoFilesLogger->info(sprintf('File "%s" has been cleaned up', $path));
     }
 
     private function tmpName(string $path): string

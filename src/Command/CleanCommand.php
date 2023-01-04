@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoPdfMetadata\Command;
 
-use Contao\CoreBundle\Filesystem\FilesystemItem;
-use Contao\CoreBundle\Filesystem\FilesystemItemIterator;
 use Contao\CoreBundle\Filesystem\VirtualFilesystemInterface;
 use Postyou\ContaoPdfMetadata\Metadata\PdfMetadataCleaner;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -36,19 +34,10 @@ class CleanCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        foreach ($this->pdfFiles() as $item) {
-            ($this->pdfMetadataCleaner)($item->getPath());
-        }
-
-        return 0;
-    }
-
-    private function pdfFiles(): FilesystemItemIterator
-    {
         $files = $this->filesStorage->listContents('.', true, VirtualFilesystemInterface::BYPASS_DBAFS)->files();
 
-        return $files->filter(
-            fn (FilesystemItem $item): bool => 'pdf' === mb_strtolower(pathinfo($item->getPath(), PATHINFO_EXTENSION))
-        );
+        $this->pdfMetadataCleaner->clean($files);
+
+        return 0;
     }
 }
