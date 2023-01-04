@@ -2,7 +2,6 @@
     "name": "postyou/contao-pdf-metadata",
     "type": "contao-bundle",
     "description": "Extends the contao file manager to clean up the metadata of PDF files for privacy reasons",
-    "version": "1.0.0",
     "license": "LGPL-3.0+",
     "keywords": [
         "exiftool",
