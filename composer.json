@@ -38,13 +38,14 @@
             "Postyou\\ContaoPdfMetadata\\": "src/"
         }
     },
+    "extra": {
+        "contao-manager-plugin": "Postyou\\ContaoPdfMetadata\\ContaoManager\\Plugin"
+    },
     "config": {
         "allow-plugins": {
+            "composer/package-versions-deprecated": true,
             "contao-components/installer": true,
             "contao/manager-plugin": true
         }
-    },
-    "extra": {
-        "contao-manager-plugin": "Postyou\\ContaoPdfMetadata\\ContaoManager\\Plugin"
     }
 }

@@ -24,6 +24,9 @@ class PdfPostUploadListener
     ) {
     }
 
+    /**
+     * @param string[] $files
+     */
     public function __invoke(array $files): void
     {
         if (!$this->cleanupOnUpload) {

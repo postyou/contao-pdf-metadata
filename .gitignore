@@ -2,5 +2,6 @@
 /composer.lock
 /vendor/
 
-# Vscode
+# Configuration
 /.vscode/
+.php-version

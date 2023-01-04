@@ -30,6 +30,9 @@ class PdfMetadataCleaner
     ) {
     }
 
+    /**
+     * @param FilesystemItemIterator|string[] $files
+     */
     public function clean(FilesystemItemIterator|array $files): void
     {
         if ($files instanceof FilesystemItemIterator) {
