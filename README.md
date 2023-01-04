@@ -1,6 +1,8 @@
 # Contao PDF Metadata
 Extends the contao file manager to clean up the metadata of PDF files for privacy reasons.
 
+[![Packagist Version](https://img.shields.io/packagist/v/postyou/contao-pdf-metadata)](https://packagist.org/packages/postyou/contao-pdf-metadata)
+
 The following two commands are executed in the prozess:
 
 
