@@ -10,7 +10,6 @@ $ qpdf --linearize intermediate.pdf file.pdf
 ```
 
 ## Requirements
-- PHP 8
 - [ExifTool](https://github.com/exiftool/exiftool) installed on the system
 - [QPDF](https://github.com/qpdf/qpdf) installed on the system
 
