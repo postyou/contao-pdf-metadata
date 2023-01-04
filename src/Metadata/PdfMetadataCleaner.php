@@ -59,23 +59,18 @@ class PdfMetadataCleaner
         ]);
 
         if (0 !== $exiftool->run()) {
-            $this->logError($path, $exiftool->getOutput());
+            $this->contaoErrorLogger->error(sprintf('File "%s" could not be processed with ExifTool: %s', $path, $exiftool->getErrorOutput()));
 
             return;
         }
 
         if (0 !== $qpdf->run()) {
-            $this->logError($path, $qpdf->getOutput());
+            $this->contaoErrorLogger->error(sprintf('File "%s" could not be processed with QPDF: %s', $path, $qpdf->getErrorOutput()));
 
             return;
         }
 
-        $this->contaoFilesLogger->info("Datei {$path} wurde erfolgreich bereinigt.");
-    }
-
-    private function logError(string $path, string $message): void
-    {
-        $this->contaoErrorLogger->error("Datei {$path} konnte nicht bereinigt werden ({$message}).");
+        $this->contaoFilesLogger->info(sprintf('File "%s" has been successfully cleaned up', $path));
     }
 
     private function tmpName(string $path): string
