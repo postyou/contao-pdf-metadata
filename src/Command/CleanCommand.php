@@ -45,7 +45,7 @@ class CleanCommand extends Command
 
     private function pdfFiles(): FilesystemItemIterator
     {
-        $files = $this->filesStorage->listContents('.', true, VirtualFilesystemInterface::FORCE_SYNC)->files();
+        $files = $this->filesStorage->listContents('.', true, VirtualFilesystemInterface::BYPASS_DBAFS)->files();
 
         return $files->filter(
             fn (FilesystemItem $item): bool => 'pdf' === mb_strtolower(pathinfo($item->getPath(), PATHINFO_EXTENSION))
