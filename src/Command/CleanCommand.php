@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoPdfMetadata\Command;
 
+use Contao\CoreBundle\Filesystem\FilesystemItem;
 use Contao\CoreBundle\Filesystem\VirtualFilesystemInterface;
 use Postyou\ContaoPdfMetadata\Metadata\PdfMetadataCleaner;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -36,8 +37,20 @@ class CleanCommand extends Command
     {
         $files = $this->filesStorage->listContents('.', true, VirtualFilesystemInterface::BYPASS_DBAFS)->files();
 
-        $this->pdfMetadataCleaner->clean($files);
+        $files = $files->filter(
+            fn (FilesystemItem $file) => 'application/pdf' === $file->getMimeType('application/octet-stream')
+        );
 
-        return 0;
+        foreach ($files as $file) {
+            $output->write('Processing file '.$file->getPath());
+
+            if ($this->pdfMetadataCleaner->clean($file->getPath())) {
+                $output->writeln(' <fg=green>✓</>');
+            } else {
+                $output->writeln(' <fg=red>✗</>');
+            }
+        }
+
+        return Command::SUCCESS;
     }
 }
