@@ -31,9 +31,9 @@ class PdfMetadataCleaner
     }
 
     /**
-     * @param FilesystemItemIterator|string[] $data
+     * @param FilesystemItemIterator|string|string[] $data
      */
-    public function clean(FilesystemItemIterator|array|string $data): bool
+    public function clean(FilesystemItemIterator|string|array $data): bool
     {
         if (\is_string($data)) {
             return $this->cleanFile($data);
