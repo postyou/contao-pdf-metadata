@@ -13,16 +13,19 @@ declare(strict_types=1);
 namespace Postyou\ContaoPdfMetadata\Command;
 
 use Contao\CoreBundle\Filesystem\FilesystemItem;
+use Contao\CoreBundle\Filesystem\FilesystemItemIterator;
 use Contao\CoreBundle\Filesystem\VirtualFilesystemInterface;
-use Postyou\ContaoPdfMetadata\Metadata\PdfMetadataCleaner;
+use Postyou\ContaoPdfMetadata\MetadataCleaner\PdfMetadataCleaner;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'pdf-metadata:clean-all',
-    description: 'Clean up the metadata of all PDF files inside the files directory.'
+    name: 'pdf-metadata:clean',
+    description: 'Clean up the metadata of PDF files inside the files directory.'
 )]
 class CleanCommand extends Command
 {
@@ -33,24 +36,47 @@ class CleanCommand extends Command
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function configure(): void
     {
-        $files = $this->filesStorage->listContents('.', true, VirtualFilesystemInterface::BYPASS_DBAFS)->files();
+        $this->addArgument('path', InputArgument::OPTIONAL, 'Optional path(s)');
+    }
 
-        $files = $files->filter(
-            fn (FilesystemItem $file) => 'application/pdf' === $file->getMimeType('application/octet-stream')
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $time = microtime(true);
+        $files = $this->getFiles($input->getArgument('path') ?? '');
+        $count = iterator_count($files);
+
+        (new SymfonyStyle($input, $output))->info(
+            sprintf('Found %s file%s', $count, 1 === $count ? '' : 's')
         );
 
-        foreach ($files as $file) {
-            $output->write('Processing file '.$file->getPath());
+        foreach ($files as $i => $file) {
+            $current = $i + 1;
+            $output->write("({$current}/{$count}) Processing {$file->getPath()}");
 
-            if ($this->pdfMetadataCleaner->clean($file->getPath())) {
-                $output->writeln(' <fg=green>✓</>');
+            $result = $this->pdfMetadataCleaner->process($file->getPath());
+
+            if ($result->success) {
+                $output->writeln(' <fg=green>✓ Success</>');
             } else {
-                $output->writeln(' <fg=red>✗</>');
+                $output->writeln(sprintf(' <fg=red>✗ %s</>', $result->getMessage()));
             }
         }
 
+        $timeTotal = round(microtime(true) - $time, 2);
+
+        (new SymfonyStyle($input, $output))->success("Processing complete in {$timeTotal}s.");
+
         return Command::SUCCESS;
+    }
+
+    protected function getFiles(string $location): FilesystemItemIterator
+    {
+        $files = $this->filesStorage->listContents($location, true, VirtualFilesystemInterface::BYPASS_DBAFS)->files();
+
+        return $files->filter(
+            fn (FilesystemItem $file) => 'application/pdf' === $file->getMimeType('application/octet-stream')
+        );
     }
 }
