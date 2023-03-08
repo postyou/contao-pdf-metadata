@@ -13,12 +13,14 @@ declare(strict_types=1);
 namespace Postyou\ContaoPdfMetadata\EventListener;
 
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
-use Postyou\ContaoPdfMetadata\Metadata\PdfMetadataCleaner;
+use Postyou\ContaoPdfMetadata\MetadataCleaner\CleanerUtil;
+use Postyou\ContaoPdfMetadata\MetadataCleaner\PdfMetadataCleaner;
 
 #[AsHook('postUpload')]
 class PdfPostUploadListener
 {
     public function __construct(
+        private CleanerUtil $cleanerUtil,
         private PdfMetadataCleaner $pdfMetadataCleaner,
         private bool $cleanupOnUpload,
     ) {
@@ -33,6 +35,15 @@ class PdfPostUploadListener
             return;
         }
 
-        $this->pdfMetadataCleaner->clean($files);
+        foreach ($files as $path) {
+            // Only consider pdf files
+            if ('pdf' !== mb_strtolower(pathinfo($path, PATHINFO_EXTENSION))) {
+                continue;
+            }
+
+            $result = $this->pdfMetadataCleaner->process($path);
+
+            $this->cleanerUtil->logResult($result);
+        }
     }
 }
