@@ -34,7 +34,7 @@ class CleanerUtil
         }
 
         $this->contaoErrorLogger->error(
-            "File \"{$result->path}\" could not be processed with {$result->name}: {$result->process->getErrorOutput()}"
+            "File \"{$result->path}\" could not be processed with {$result->name}: {$result->getMessage()}"
         );
     }
 
