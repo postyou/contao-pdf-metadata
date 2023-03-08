@@ -28,13 +28,13 @@ class CleanerUtil
     public function logResult(ProcessResult $result): void
     {
         if ($result->success) {
-            $this->contaoFilesLogger->info("File {$result->path} has been cleaned up");
+            $this->contaoFilesLogger->info("File \"{$result->path}\" has been cleaned up");
 
             return;
         }
 
         $this->contaoErrorLogger->error(
-            "File {$result->path} could not be processed with {$result->name}: {$result->process->getErrorOutput()}"
+            "File \"{$result->path}\" could not be processed with {$result->name}: {$result->process->getErrorOutput()}"
         );
     }
 
