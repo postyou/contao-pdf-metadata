@@ -38,7 +38,7 @@ class CleanCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('path', InputArgument::OPTIONAL, 'Optional path(s)');
+        $this->addArgument('path', InputArgument::OPTIONAL, 'Optional path');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
